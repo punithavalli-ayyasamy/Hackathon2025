@@ -17,6 +17,8 @@ Open question - do we need to include supplier chain here
     2. Yield prediction -?
     3. Commoditiy price forecasting
     4. Predictive lending based on above model output
+**AGENT AI**
+**Prompting**
 
 **User Interface (UI/UX)**
 
