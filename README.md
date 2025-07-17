@@ -1,6 +1,6 @@
 Open question - do we need to include supplier chain here
 
-**Data Sourcing - Need clear identification of data required for prediction **
+**Data Sourcing - Need clear identification of data required for prediction**
 
     1. https://huggingface.co/datasets/CropNet/CropNet - Climate aware crop prediction. includes weather data, Satellite imagery , crop data
     2. Prasanna18/Crop-Prediction - Basic prediction based on crop parameters
