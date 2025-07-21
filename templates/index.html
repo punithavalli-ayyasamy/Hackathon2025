@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Financial Inclusion Chatbot</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <h2>🤖 Financial Inclusion Chatbot</h2>
+
+  <!-- Navigation Tabs -->
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showSection('faq')">📚 FAQ</button>
+    <button class="tab-btn" onclick="showSection('ai')">🧠 AI Chat</button>
+    <button class="tab-btn" onclick="showSection('services')">🔗 Services</button>
+  </div>
+
+  <!-- FAQ Section -->
+  <div id="faq" class="section active">
+    <h3>Frequently Asked Questions</h3>
+    <div style="margin-bottom: 15px;">
+      <button class="toggle-all" onclick="expandAll()">Expand All</button>
+      <button class="toggle-all" onclick="collapseAll()">Collapse All</button>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleAnswer(this)">What is financial inclusion?</button>
+        <div class="faq-answer">Providing access to useful financial services for everyone.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleAnswer(this)">How do I apply for a loan?</button>
+        <div class="faq-answer">You can apply through our loan portal in the Services section.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleAnswer(this)">What training programs are available?</button>
+        <div class="faq-answer">Digital literacy, entrepreneurship, and loan management.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Chat Section -->
+  <div id="ai" class="section">
+    <h3>Chat with AI</h3>
+    <form action="/ask" method="post">
+      <label for="question">Ask your question:</label>
+      <input type="text" id="question" name="question" required placeholder="E.g., What is a credit score?">
+      <button type="submit">Ask</button>
+    </form>
+
+    {% if answer %}
+    <div class="response">
+      <h4>Answer:</h4>
+      <p>{{ answer }}</p>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Services Section -->
+  <div id="services" class="section">
+    <h3>Explore Our Services</h3>
+    <div class="service-links">
+      <a href="/loan" target="_blank">🏦 Loan Application</a>
+      <a href="/training" target="_blank">🎓 Training Programs</a>
+      <a href="/assessment" target="_blank">📊 Assessment</a>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+
+</body>
+</html>
