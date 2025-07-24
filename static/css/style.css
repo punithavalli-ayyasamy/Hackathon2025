@@ -13,8 +13,9 @@ body {
 }
 
 h2 {
-  color: #005792;
+  color: #fff; /* 👈 White text */
   margin-bottom: 20px;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5); /* ✅ Optional: makes white text readable on any background */
 }
 
 .nav-tabs {
@@ -147,4 +148,32 @@ button:hover,
 .faq-answer.open {
   padding: 12px;
   max-height: 500px;
+}
+
+body {
+  background-image: url('../images/pexels-pixabay-461960.jpg'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed; 
+  color: #fff; 
+}
+
+
+.section {
+  background: rgba(255, 255, 255, 0.9); 
+  color: #000;
+}
+
+
+.response {
+  background-color: rgba(231, 243, 255, 0.95);
+  color: #000;
+}
+
+
+.section,
+.response,
+.service-links a {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
