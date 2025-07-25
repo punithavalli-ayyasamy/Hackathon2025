@@ -1,133 +1,108 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import './style.css';
 import agriImage from './assets/agri-bg.jpg';
 
 const BotIntro = () => {
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const [isStarted, setIsStarted] = useState(false);
-  const utteranceRef = useRef(null);
+  const [language, setLanguage] = useState('hi'); // auto-detect or set default
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(null);
 
-  const message = `Here is the brand new solution for Financial Inclusion! This application empowers farmers and small businesses by 
-  assessing crop choices, predicting yields, and helping with loan approvals. 
-  We also help connect with the PDS system under MSP contracts for better supply chain management.`;
-
-  useEffect(() => {
-    speechSynthesis.cancel(); // Ensure no leftover utterances
-    window.speechSynthesis.onvoiceschanged = () => {};
-  }, []);
-
-  const getVoice = () => {
-    const voices = speechSynthesis.getVoices();
-    return (
-      voices.find(v => v.name.includes('Google US English')) ||
-      voices.find(v => v.name.includes('Zira')) ||
-      voices.find(v => v.gender === 'female') ||
-      voices[0]
-    );
+  const messages = {
+    en: `Here is the brand new solution for Financial Inclusion! This application empowers farmers and small businesses by 
+    assessing crop choices, predicting yields, and helping with loan approvals. 
+    We also help to get insurance, connect with the PDS system under MSP contracts for better supply chain management.`,
+    
+    hi: `यह वित्तीय समावेशन के लिए एक नया समाधान है! यह एप्लिकेशन किसानों और छोटे व्यवसायों को 
+    फसल चयन का मूल्यांकन करने, उपज की भविष्यवाणी करने, और ऋण अनुमोदन में सहायता करता है। 
+    हम बीमा प्राप्त करने, एमएसपी अनुबंधों के तहत सार्वजनिक वितरण प्रणाली से जुड़ने में भी मदद करते हैं।`
   };
 
-  const createUtterance = () => {
-    const utterance = new SpeechSynthesisUtterance(message);
-    utterance.rate = 0.95;
-    utterance.pitch = 1;
-    utterance.lang = 'en-US';
-    utterance.voice = getVoice();
-
-    utterance.onstart = () => {
-      setIsSpeaking(true);
-      setIsPaused(false);
-      setIsStarted(true);
-    };
-    utterance.onend = () => {
-      setIsSpeaking(false);
-      setIsPaused(false);
-      setIsStarted(false);
-      utteranceRef.current = null;
-    };
-
-    utterance.onerror = () => {
-      setIsSpeaking(false);
-      setIsPaused(false);
-      setIsStarted(false);
-      utteranceRef.current = null;
-    };
-
-    return utterance;
+  const audioSources = {
+    en: '/bot_voice_en.mp3',
+    hi: '/bot_voice_hi.mp3'
   };
 
-  const speakIntro = () => {
-    // Resume if paused
-    if (isPaused && speechSynthesis.paused) {
-      speechSynthesis.resume();
-      setIsPaused(false);
-      setIsSpeaking(true);
-      return;
+  const playAudio = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.play();
+    setIsPlaying(true);
+  };
+
+  const pauseAudio = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.pause();
+    setIsPlaying(false);
+  };
+
+  const stopAudio = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.pause();
+    audio.currentTime = 0;
+    setIsPlaying(false);
+  };
+
+  const togglePlayPause = () => {
+    if (isPlaying) {
+      pauseAudio();
+    } else {
+      playAudio();
     }
-
-    // Ignore if already speaking
-    if (speechSynthesis.speaking && !speechSynthesis.paused) return;
-
-    // Clean up previous
-    speechSynthesis.cancel();
-
-    const utterance = createUtterance();
-    utteranceRef.current = utterance;
-    speechSynthesis.speak(utterance);
-  };
-
-  const pauseSpeech = () => {
-    if (speechSynthesis.speaking && !speechSynthesis.paused) {
-      speechSynthesis.pause();
-      setIsPaused(true);
-      setIsSpeaking(false);
-    }
-  };
-
-  const stopSpeech = () => {
-    speechSynthesis.cancel();
-    utteranceRef.current = null;
-    setIsSpeaking(false);
-    setIsPaused(false);
-    setIsStarted(false);
   };
 
   return (
     <div className='parent'>
-    <div className="bot-container">
-      <img src={agriImage} alt="Agriculture" className="agri-image" />
-      <div className="bot-text">{message}</div>
+      <div className="bot-container">
+        <img src={agriImage} alt="Agriculture" className="agri-image" />
+        <div className="bot-text">{messages[language]}</div>
 
-      <div className="control-buttons">
-        <div className="media-button-group">
-          <button
-            className="media-btn green-btn"
-            onClick={() => {
-              if (isSpeaking) {
-                pauseSpeech();
-              } else {
-                speakIntro();
-              }
+        {/* Hidden audio element */}
+        <audio
+          ref={audioRef}
+          src={audioSources[language]}
+          onEnded={() => setIsPlaying(false)}
+        />
+
+        <div className="language-selector">
+          <label htmlFor="lang">Language: </label>
+          <select
+            id="lang"
+            value={language}
+            onChange={(e) => {
+              stopAudio();
+              setLanguage(e.target.value);
             }}
           >
-            {isSpeaking ? '⏸' : '▶'}
-          </button>
-
-          <button className="media-btn red-btn" onClick={stopSpeech}>
-            ⏹
-          </button>
+            <option value="en">English</option>
+            <option value="hi">Hindi</option>
+          </select>
         </div>
-      </div>
 
-      <button
-        className="next-btn large-next-btn"
-        onClick={() => (window.location.href = '/features')}
-      >
-        Next →
-      </button>
+        <div className="control-buttons">
+          <div className="media-button-group">
+            <button className="media-btn green-btn" onClick={togglePlayPause}>
+              {isPlaying ? '⏸' : '▶'}
+            </button>
+
+            <button className="media-btn red-btn" onClick={stopAudio}>
+              ⏹
+            </button>
+          </div>
+        </div>
+
+        <button
+          className="next-btn large-next-btn"
+          onClick={() => (window.location.href = '/features')}
+        >
+          Next →
+        </button>
+      </div>
     </div>
-    </div>
-    
   );
 };
 
