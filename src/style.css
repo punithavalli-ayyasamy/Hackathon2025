@@ -2,8 +2,6 @@ body {
   /* margin: 100px; */
   padding: 0;
   font-family: 'Segoe UI', sans-serif;
-  /* background: url('./assets/agri-bg2.jpg') no-repeat center center fixed; */
-  /* background-color: grey; */
   background-size: cover;
 }
 
@@ -13,7 +11,6 @@ body {
 
 
 .bot-container {
-  /* background-color: white; */
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -21,6 +18,8 @@ body {
   flex-direction: column;
   color: white;
   text-align: center;
+  background: url('./assets/agri-bg3.jpg') no-repeat center center fixed;
+  background-size: cover;
 }
 
 .agri-image {
